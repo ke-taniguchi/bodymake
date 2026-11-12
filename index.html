@@ -184,7 +184,7 @@ details.safety ul{margin:8px 0 0;padding-left:20px;font-size:14px}
 // 設定：Google Apps Script をデプロイして発行された「ウェブアプリのURL」をここに貼り付けます。
 // 空のままだと「テスト表示」になり、記録はこの端末の中だけに保存されます。
 // ============================================================
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzAarvvYSs4Rc2WtaNmKrTmi1ls-b4DjmFEHcTyjGPt97DMAogYb3L2f60Nnvd2G4Hl/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyumf6cPpEyIC8sR8FBBlqRuDCUFFYpMIgoVJRQeqLc8RA0HZSfeqnsFeQV95LwpmyJ/exec';
 
 // ---------- 種目データ（種目名・器具・難易度はBODYMAKER「トレーニング種目辞典」を参考） ----------
 const PARTS = ['胸','背中','肩','腕','脚','腹筋・体幹','臀部'];
@@ -310,7 +310,10 @@ const api = {
     if(!GAS_URL) return localCall(action, data);
     const res = await fetch(GAS_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify({action, ...data})});
     const j = await res.json();
-    if(!j.ok) throw new Error(j.error||'エラーが起きました');
+    if(!j.ok){
+      if(j.error==='unknown action') throw new Error('サーバー側のスクリプト（Code.gs）が古いままです。新しい Code.gs を貼り付けて、「デプロイを管理」から新しいバージョンに更新してください');
+      throw new Error(j.error||'エラーが起きました');
+    }
     return j;
   },
   auth(mode, name, pin){ return api.call(mode, {name, pin}); },
