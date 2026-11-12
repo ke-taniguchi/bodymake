@@ -184,7 +184,7 @@ details.safety ul{margin:8px 0 0;padding-left:20px;font-size:14px}
 // 設定：Google Apps Script をデプロイして発行された「ウェブアプリのURL」をここに貼り付けます。
 // 空のままだと「テスト表示」になり、記録はこの端末の中だけに保存されます。
 // ============================================================
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbyumf6cPpEyIC8sR8FBBlqRuDCUFFYpMIgoVJRQeqLc8RA0HZSfeqnsFeQV95LwpmyJ/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzRmk5W525J1TxRYCBab61QREiVAT8xIQmYTph8zX2Dmj5TRtV3-fLs4AIMSaFTbCOa/exec';
 
 // ---------- 種目データ（種目名・器具・難易度はBODYMAKER「トレーニング種目辞典」を参考） ----------
 const PARTS = ['胸','背中','肩','腕','脚','腹筋・体幹','臀部'];
@@ -599,7 +599,8 @@ function logout(){
 $('logout').addEventListener('click', logout);
 
 async function doLogin(){
-  const name = $('name').value.trim(), pin = $('pin').value, pin2 = $('pin2').value;
+  const fixPin = v => v.normalize('NFKC').replace(/\s/g,'');   // 全角数字・空白を直す
+  const name = $('name').value.trim(), pin = fixPin($('pin').value), pin2 = fixPin($('pin2').value);
   const msg = $('loginMsg'); msg.textContent = '';
   if(!name){ msg.textContent = '名前を入力してください'; $('name').focus(); return; }
   if(!/^\d{4}$/.test(pin)){ msg.textContent = '暗証番号は数字4けたで入力してください'; $('pin').focus(); return; }
